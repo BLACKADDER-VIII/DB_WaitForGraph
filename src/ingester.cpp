@@ -51,15 +51,7 @@ void TransactionList::print_round_robin(){
             if (!first_op)
                 std::cout << "; ";
             first_op = false;
-            std::cout << "T" << op.transNum()+1 << ":";
-            if (op.opType() == Commit){
-                std::cout << "C";
-                continue;
-            }
-            std::cout << ((op.opType() == Read)? "R(" : "W(") << op.opObj();
-            if (op.opVal() != -1)
-                std::cout << "," << op.opVal();
-            std::cout << ")";
+            std::cout << op.opStr();
         }
     }
     std::cout << std::endl;
@@ -71,4 +63,12 @@ std::vector<Schedule>& TransactionList::schedules(){
 
 std::vector<TransactionOperation>& Schedule::schedule(){
     return this->_schedule;
+}
+
+std::queue<TransactionOperation> Schedule::schedule_stack(){
+    std::queue<TransactionOperation> ret;
+    for (auto s: this->_schedule){
+        ret.push(s);
+    }
+    return ret;
 }
