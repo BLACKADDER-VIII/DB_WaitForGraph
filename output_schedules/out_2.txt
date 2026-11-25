@@ -1,0 +1,1 @@
+T1:R(g); T2:R(e); T3:R(j); T1:W(h,2); T2:W(c,4); T3:R(g); T1:W(e,8); T2:R(h); T3:W(b,9); T1:C; T2:C; T3:C

@@ -25,7 +25,6 @@ class WaitForGraph{
             return is_done;
         };
         while(!check_done()){
-            // Update to use wait-for graph for deadlock detection
             bool did_move = false;
             for (int i = 0; i<num_trans; i++){
                 // Check if transaction waiting for a resource
@@ -73,6 +72,10 @@ class WaitForGraph{
                     for (auto& kvp : _lock_table){
                         kvp.second[i] = NoLock;
                     }
+                    // Nobody waits for i any more, so erase the edges that
+                    // point at it. The graph is left holding only the waits
+                    // that are still outstanding.
+                    _graph.remove_edges_to(i);
                     done[i] = true;
                     op_done = true;
                 }

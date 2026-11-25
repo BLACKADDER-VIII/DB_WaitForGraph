@@ -10,6 +10,15 @@ class Node{
         this->_neighbors.push_back(n);
         this->_edge_labels.push_back(label);
     }
+    // Removes the edge from this node to `n`, and its label, if there is one
+    void remove_neighbor(Node* n){
+        for (size_t k = 0; k<this->_neighbors.size(); k++){
+            if (this->_neighbors[k] != n) continue;
+            this->_neighbors.erase(this->_neighbors.begin() + k);
+            this->_edge_labels.erase(this->_edge_labels.begin() + k);
+            return;   // add_edge never draws the same edge twice
+        }
+    }
     int id() const {return this->_id;}
     const std::vector<Node*> neighbors() const {return this->_neighbors;}
     // edge_labels()[k] is the label of the edge to neighbors()[k]
@@ -35,6 +44,12 @@ class Graph{
         for (Node* n : this->_nodes[from].neighbors())
             if (n == target) return;
         this->_nodes[from].add_neighbor(target, label);
+    }
+    // Removes every edge that points at the node at position `to` in nodes()
+    void remove_edges_to(int to){
+        Node* target = &this->_nodes[to];
+        for (Node& n : this->_nodes)
+            n.remove_neighbor(target);
     }
     private:
     std::vector<Node> _nodes;

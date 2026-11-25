@@ -34,7 +34,8 @@ void TransactionList::ingest(){
 //     T1:R(a); T2:R(b); T1:W(b,1); T2:C; T1:C
 // Each pass takes the next operation from every transaction that still has
 // one, in input order. Transactions are labelled T1, T2, ... by position.
-void TransactionList::print_round_robin(){
+// The line goes to `out`, which is std::cout unless another stream is given.
+void TransactionList::print_round_robin(std::ostream& out){
     // The longest transaction decides how many passes are needed
     size_t max_num_ops = 0;
     for (Schedule& sched : this->_schedules){
@@ -49,12 +50,12 @@ void TransactionList::print_round_robin(){
                 continue;   // This transaction has already committed
             TransactionOperation& op = trans_ops[i];
             if (!first_op)
-                std::cout << "; ";
+                out << "; ";
             first_op = false;
-            std::cout << op.opStr();
+            out << op.opStr();
         }
     }
-    std::cout << std::endl;
+    out << std::endl;
 }
 
 std::vector<Schedule>& TransactionList::schedules(){

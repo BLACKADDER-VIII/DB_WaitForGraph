@@ -1,2 +1,4 @@
 .venv
 graphs/
+wait_for_graph
+build/

@@ -20,7 +20,7 @@ class TransactionList{
     TransactionList(){}
     void ingest();
     std::vector<Schedule>& schedules();
-    void print_round_robin();
+    void print_round_robin(std::ostream& out = std::cout);   // Write the round-robin schedule to out
     private:
     std::vector<Schedule> _schedules;
 };
