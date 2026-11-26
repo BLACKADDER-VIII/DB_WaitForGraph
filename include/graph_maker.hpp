@@ -1,3 +1,6 @@
+// Author: Dhroov Pandey
+// Last modified: November 25, 2026
+
 #pragma once
 #include "graph.h"
 #include "ingester.hpp"

@@ -1,3 +1,6 @@
+// Author: Dhroov Pandey
+// Last modified: November 25, 2026
+
 #include "ingester.hpp"
 
 void TransactionList::ingest(){
