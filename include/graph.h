@@ -1,5 +1,5 @@
 // Author: Dhroov Pandey
-// Last modified: November 25, 2026
+// Last modified: November 28, 2026
 
 #pragma once
 #include <string>
@@ -37,18 +37,14 @@ class Graph{
     Graph(){}
     const std::vector<Node>& nodes(){return this->_nodes;}
     void add_nodes(Node& n){this->_nodes.push_back(n);}
-    // Draws a directed edge from the node at position `from` in nodes() to the
-    // node at position `to`, carrying `label` as its attribute. Does nothing
-    // if that edge already exists (the first label is kept).
-    // Edges are pointers into _nodes, so add every node before the first edge:
-    // a later add_nodes() may move the nodes and leave the edges dangling.
+    // Draws a directed edge nodes[fromt]->nodes[to]; no action if edge already exists
     void add_edge(int from, int to, const std::string& label = ""){
         Node* target = &this->_nodes[to];
         for (Node* n : this->_nodes[from].neighbors())
             if (n == target) return;
         this->_nodes[from].add_neighbor(target, label);
     }
-    // Removes every edge that points at the node at position `to` in nodes()
+    // Removes every edge that points to nodes[to]
     void remove_edges_to(int to){
         Node* target = &this->_nodes[to];
         for (Node& n : this->_nodes)

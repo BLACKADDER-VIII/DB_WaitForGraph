@@ -1,5 +1,5 @@
 // Author: Dhroov Pandey
-// Last modified: November 25, 2026
+// Last modified: November 28, 2026
 
 #pragma once
 #include "graph.h"
@@ -8,9 +8,6 @@
 
 enum LockType{NoLock, ReadLock, WriteLock};
 
-// Where write_graphml() puts the graph when it is given no path. Relative to
-// the directory the program is run from, so run from the project root to get
-// <root>/graphs/wait_for_graph.graphml
 const char* const DEFAULT_GRAPHML_PATH = "graphs/wait_for_graph.graphml";
 
 class WaitForGraph{
@@ -75,19 +72,13 @@ class WaitForGraph{
                     for (auto& kvp : _lock_table){
                         kvp.second[i] = NoLock;
                     }
-                    // Nobody waits for i any more, so erase the edges that
-                    // point at it. The graph is left holding only the waits
-                    // that are still outstanding.
+                    // remove in-edges to i
                     _graph.remove_edges_to(i);
                     done[i] = true;
                     op_done = true;
                 }
                 if (draw_edge){
-                    // Transaction i must wait: draw an edge from i to every
-                    // transaction holding a lock that blocks it, labelled with
-                    // the operation that is blocked. A waiting transaction
-                    // retries every pass, so add_edge skips edges that are
-                    // already there.
+                    // Waiting: draw edge from i to all lock holders
                     for (int holder : lock_holders)
                         _graph.add_edge(i, holder, curr_op.opStr());
                 }

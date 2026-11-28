@@ -1,5 +1,5 @@
 // Author: Dhroov Pandey
-// Last modified: November 25, 2026
+// Last modified: November 28, 2026
 
 #pragma once
 #include <string>
@@ -13,8 +13,6 @@ class TransactionOperation {
     char opObj(){return this->op_obj;}
     int transNum(){return this->trans_num;}
     int opVal(){return this->op_val;}   // Value in W(x,value); -1 if the op has none
-    // The operation as written in the schedule, e.g. "T1:R(a)", "T2:W(a,2)" or
-    // "T3:C". Transactions are labelled T1, T2, ... so T1 is transNum() == 0.
     std::string opStr(){
         std::string s = "T" + std::to_string(this->trans_num+1) + ":";
         if (this->op_type == Commit) return s + "C";

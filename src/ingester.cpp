@@ -1,11 +1,10 @@
 // Author: Dhroov Pandey
-// Last modified: November 25, 2026
+// Last modified: November 28, 2026
 
 #include "ingester.hpp"
 
 void TransactionList::ingest(){
-    // Read one transaction per line until EOF, a blank line, or a line that
-    // does not start with 'T'
+    // Read one transaction per line until EOF, blank line, or not 'T' at line start
     std::vector<std::string> transaction_strings;
     std::string line;
     while (std::getline(std::cin, line) && !line.empty() && line[0] == 'T'){
@@ -14,13 +13,12 @@ void TransactionList::ingest(){
     int num_trans = transaction_strings.size();
     // One schedule per transaction, in input order
     this->_schedules = std::vector<Schedule>(num_trans);
-    // Matches R(x), W(x) and W(x,value); group 1 is the op, group 2 the object,
-    // group 3 the value (empty if there is none)
+    // Matches R(x), W(x) and W(x,value); captures the op, data obj, and value (if exists)
     std::regex pattern(R"(([RW])\(([a-z]),?([0-9]*)\))");
     for (int i = 0; i<num_trans; i++){
         const std::string& curr_trans_str = transaction_strings[i];
         std::vector<TransactionOperation>& trans_ops = this->_schedules[i].schedule();
-        // Collect every read/write on the line, in order
+        // Collect every read/write on the line in order
         std::sregex_iterator match(curr_trans_str.begin(), curr_trans_str.end(), pattern);
         std::sregex_iterator no_more_matches;
         for (; match != no_more_matches; ++match){
@@ -33,11 +31,7 @@ void TransactionList::ingest(){
     }
 }
 
-// Prints the round-robin ordering of all operations on one line, e.g.
-//     T1:R(a); T2:R(b); T1:W(b,1); T2:C; T1:C
-// Each pass takes the next operation from every transaction that still has
-// one, in input order. Transactions are labelled T1, T2, ... by position.
-// The line goes to `out`, which is std::cout unless another stream is given.
+// Prints the round-robin ordering of all operations on one line
 void TransactionList::print_round_robin(std::ostream& out){
     // The longest transaction decides how many passes are needed
     size_t max_num_ops = 0;
